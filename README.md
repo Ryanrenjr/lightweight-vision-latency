@@ -1,4 +1,6 @@
-Lightweight Image Classification: Accuracy vs Speed I. What is this project about?
+Lightweight Image Classification: Accuracy vs Speed 
+
+I. What is this project about?
 
 In many real situations (robotics, mobile apps, AR, etc.), a vision model must do two things:
 
@@ -15,6 +17,7 @@ I fine-tuned a small image classification model (ResNet-18) on the CIFAR-10 data
 I measured how fast this model runs on my own laptop, and I looked at the images it got wrong to understand why it failed.
 
 This is close to real deployment thinking. It is not only “get a high accuracy number”, but “will this model actually work in the real world?”
+
 
 II. Environment / setup
 
@@ -45,6 +48,8 @@ What this means:
 
 After only a short fine-tune, the model reaches about 80.88% test accuracy.
 Now I have a working small vision model and a weight file I can load again later.
+
+
 IV. Inference speed / latency test (bench.py)
 
 Why I do this: In real products (robot, camera feed, AR app), accuracy is not enough. The model must be fast. We need to know: how many milliseconds per image? How many frames per second?
@@ -89,6 +94,8 @@ This looks “backwards” because usually we think “GPU is faster.” But her
 
 So in this real-time, single-frame scenario, CPU is actually faster. This shows why you cannot assume “GPU is always better.” You must test for your real use case.
 
+
+
 V. Misclassified samples / error analysis (miscls.py)
 
 It is not enough to say “accuracy is 80.88%”. I also need to see where it fails.
@@ -104,6 +111,8 @@ Why this is useful: -I am not just giving one big number. I can explain why the 
 
 This is important for real-world vision and robotics, because real camera images are often blurry, dark, or partly blocked. They are not perfect “textbook” images.
 
+
+
 VI. Summary table (accuracy + speed) Setup / Scenario Top-1 Acc. Avg (ms) p50 (ms) p95 (ms) FPS CPU inference (ResNet-18, batch=1) 80.88% 4.3 4.3 5.4 230.6 MPS (Apple Metal backend, batch=1) 80.88% 11.9 11.8 14.2 83.8
 
 Notes: -The model and weights are the same. Only the runtime backend changes. -CPU wins here because the model is small and we use batch size = 1. -For bigger models or bigger batches, a GPU / MPS backend can be faster. -This thinking (accuracy + latency + stability) is important for robotics and any edge/real-time system.
@@ -117,6 +126,8 @@ Engineering mindset (not only theory) I did real latency tests (avg / p50 / p95)
 Reliability and failure cases I did not stop at “80.88% accuracy”. I exported real wrong predictions (cat↔dog, bird→car), and I explained why the model was confused (low resolution, look-alike classes, background noise). I also suggested how to improve (higher resolution, stronger data augmentation, etc.). This shows I care about robustness in real conditions, not just about getting a nice number.
 
 In other words, this project is not just “I can code in PyTorch.” It shows I understand how to push a vision model toward real deployment and how to talk about its limits.
+
+
 
 VIII. Project files
 
